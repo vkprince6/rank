@@ -1,0 +1,222 @@
+.climb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.90);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: overlay-in .4s ease forwards;
+  backdrop-filter: blur(10px);
+}
+.climb-overlay.fade-out {
+  animation: overlay-out .4s ease forwards;
+}
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.climb-ladder {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  padding: 0 20px;
+}
+
+/* ── Rank slot card ── */
+.climb-slot {
+  display: grid;
+  grid-template-columns: 60px 1fr 100px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, rgba(19,27,46,.9), rgba(34,42,61,.85));
+  border: 1px solid rgba(45,52,73,.5);
+  align-items: center;
+  border-radius: 14px;
+  opacity: 0;
+  transform: translateY(16px) scale(.95);
+  transition: transform .3s ease, background .4s, border-color .4s, box-shadow .4s;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer accent line on top 3 slots */
+.climb-slot::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  opacity: 0;
+  transition: opacity .4s;
+}
+.climb-slot.is-top1::before,
+.climb-slot.is-top2::before,
+.climb-slot.is-top3::before {
+  opacity: 1;
+}
+.climb-slot.is-top2::before {
+  background: linear-gradient(90deg, transparent, var(--silver), transparent);
+}
+.climb-slot.is-top3::before {
+  background: linear-gradient(90deg, transparent, var(--bronze), transparent);
+}
+
+.climb-slot.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Rank number */
+.climb-slot-rank {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: rgba(154,144,120,.65);
+  text-align: center;
+  letter-spacing: .04em;
+}
+
+/* Name */
+.climb-slot-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: rgba(218,226,253,.9);
+  padding-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Score */
+.climb-slot-score {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 900;
+  color: rgba(218,226,253,.75);
+  text-align: right;
+}
+
+/* ── Top 3 highlights ── */
+.climb-slot.is-top1 {
+  background: linear-gradient(135deg, rgba(234,255,0,.12), rgba(234,255,0,.05));
+  border-color: rgba(234,255,0,.6);
+  box-shadow: 0 4px 24px rgba(234,255,0,.15);
+}
+.climb-slot.is-top1 .climb-slot-rank,
+.climb-slot.is-top1 .climb-slot-name {
+  color: #EAFF00;
+}
+.climb-slot.is-top1 .climb-slot-score {
+  color: rgba(234,255,0,.85);
+}
+
+.climb-slot.is-top2 {
+  background: linear-gradient(135deg, rgba(192,192,192,.08), rgba(34,42,61,.85));
+  border-color: rgba(192,192,192,.35);
+}
+.climb-slot.is-top2 .climb-slot-rank {
+  color: var(--silver);
+}
+
+.climb-slot.is-top3 {
+  background: linear-gradient(135deg, rgba(205,127,50,.08), rgba(34,42,61,.85));
+  border-color: rgba(205,127,50,.35);
+}
+.climb-slot.is-top3 .climb-slot-rank {
+  color: var(--bronze);
+}
+
+/* ── Climber row ── */
+.climb-slot.is-climber {
+  background: linear-gradient(135deg, rgba(234,255,0,.18), rgba(234,255,0,.06)) !important;
+  border-color: #EAFF00 !important;
+  box-shadow: 0 0 28px rgba(234,255,0,.3) !important;
+  animation: climber-pulse 2s ease-in-out infinite;
+}
+.climb-slot.is-climber .climb-slot-rank,
+.climb-slot.is-climber .climb-slot-name {
+  color: #EAFF00 !important;
+}
+.climb-slot.is-climber .climb-slot-score {
+  color: rgba(234,255,0,.85) !important;
+}
+
+@keyframes climber-pulse {
+  0%, 100% { box-shadow: 0 0 28px rgba(234,255,0,.25); }
+  50%      { box-shadow: 0 0 44px rgba(234,255,0,.45); }
+}
+
+/* ── Climber bumping up ── */
+.climb-slot.is-climber.is-bumping {
+  animation: climber-bump .4s ease-in-out;
+}
+@keyframes climber-bump {
+  0%   { transform: translateY(0) scale(1); z-index: 2; }
+  30%  { transform: translateY(-18px) scale(1.04); box-shadow: 0 8px 40px rgba(234,255,0,.55); z-index: 10; }
+  55%  { transform: translateY(3px) scale(.98); }
+  100% { transform: translateY(0) scale(1); z-index: 2; }
+}
+
+/* ── Row being displaced ── */
+.climb-slot.is-displaced {
+  animation: displaced .35s ease;
+}
+@keyframes displaced {
+  0%   { transform: translateY(0) scale(1); filter: brightness(1); }
+  30%  { transform: translateY(-14px) scale(.97); filter: brightness(.75); }
+  100% { transform: translateY(0) scale(1); filter: brightness(1); }
+}
+
+/* ── Final arrival at #1 ── */
+.climb-slot.arrived {
+  animation: arrived-pulse .9s ease-in-out;
+}
+@keyframes arrived-pulse {
+  0%   { transform: scale(1); box-shadow: 0 0 30px rgba(234,255,0,.3); }
+  35%  { transform: scale(1.04); box-shadow: 0 0 60px rgba(234,255,0,.6); }
+  65%  { transform: scale(.99); }
+  100% { transform: scale(1); box-shadow: 0 0 30px rgba(234,255,0,.3); }
+}
+
+/* ── Stagger show animation ── */
+.climb-slot:nth-child(1).show  { animation: slot-spring .45s .05s ease both; }
+.climb-slot:nth-child(2).show  { animation: slot-spring .45s .10s ease both; }
+.climb-slot:nth-child(3).show  { animation: slot-spring .45s .15s ease both; }
+.climb-slot:nth-child(4).show  { animation: slot-spring .45s .20s ease both; }
+.climb-slot:nth-child(5).show  { animation: slot-spring .45s .25s ease both; }
+.climb-slot:nth-child(6).show  { animation: slot-spring .45s .30s ease both; }
+.climb-slot:nth-child(7).show  { animation: slot-spring .45s .35s ease both; }
+.climb-slot:nth-child(8).show  { animation: slot-spring .45s .40s ease both; }
+.climb-slot:nth-child(9).show  { animation: slot-spring .45s .45s ease both; }
+.climb-slot:nth-child(10).show { animation: slot-spring .45s .50s ease both; }
+
+@keyframes slot-spring {
+  from  { opacity: 0; transform: translateY(18px) scale(.92); }
+  60%   { opacity: 1; transform: translateY(2px) scale(1.02); }
+  100%  { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .climb-ladder { max-width: 360px; gap: 6px; }
+  .climb-slot {
+    grid-template-columns: 44px 1fr 72px;
+    padding: 11px 16px;
+    border-radius: 11px;
+  }
+  .climb-slot-rank { font-size: .85rem; }
+  .climb-slot-name { font-size: .8rem; }
+  .climb-slot-score { font-size: .8rem; }
+}
