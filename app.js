@@ -1,12 +1,9 @@
 const CONFIG = {
   API_URL: "https://tinyurl.com/cbtleader",
-  REFRESH_INTERVAL: 10, // seconds
 };
 
 const lbBody = document.getElementById('lbBody');
 const statusText = document.getElementById('statusText');
-const timerEl = document.getElementById('timer');
-const topTimer = document.getElementById('topTimer');
 const emptyMsg = document.getElementById('emptyMsg');
 const refreshBtn = document.getElementById('refreshBtn');
 
@@ -53,9 +50,6 @@ collegeInput.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') setEditMode(false);
 });
 
-let countdownValue = CONFIG.REFRESH_INTERVAL;
-let countdownInterval = null;
-
 /* ── Fetch marks from Google Sheets ── */
 async function fetchMarks() {
   showStatus('loading', 'Syncing data…');
@@ -72,7 +66,6 @@ async function fetchMarks() {
     renderData(data);
     window.triggerClimbAnimation(data);
     showStatus('ok', `Updated at ${new Date().toLocaleTimeString()}`);
-    startCountdown();
   } catch (err) {
     showStatus('error', 'Failed to load. Check your connection.');
     console.error(err);
@@ -153,26 +146,6 @@ function showStatus(type, msg) {
   }
 }
 
-/* ── Countdown ── */
-function startCountdown() {
-  clearInterval(countdownInterval);
-  countdownValue = CONFIG.REFRESH_INTERVAL;
-  updateTimerDisplay();
-
-  countdownInterval = setInterval(() => {
-    countdownValue--;
-    if (countdownValue < 0) {
-      countdownValue = CONFIG.REFRESH_INTERVAL;
-    }
-    updateTimerDisplay();
-  }, 1000);
-}
-
-function updateTimerDisplay() {
-  timerEl.textContent = `${countdownValue}s`;
-  if (topTimer) topTimer.textContent = `${countdownValue}s`;
-}
-
 /* ── XSS safety ── */
 function escapeHTML(str) {
   const div = document.createElement('div');
@@ -243,6 +216,5 @@ refreshBtn.addEventListener('click', () => {
   fetchMarks();
 });
 
-/* ── Initial load + auto-refresh ── */
+/* ── Initial load ── */
 fetchMarks();
-setInterval(fetchMarks, CONFIG.REFRESH_INTERVAL * 1000);

@@ -94,25 +94,6 @@ body {
   padding: 6px 12px;
   border-left: 2px solid var(--primary);
 }
-.top-bar-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--success);
-  animation: pulse 1.5s ease-in-out infinite;
-}
-.top-bar-timer-label {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .12em;
-  color: rgba(218,226,253,.7);
-}
-.top-bar-timer {
-  font-family: 'Space Grotesk', monospace;
-  font-size: .8rem;
-  font-weight: 700;
-  color: var(--primary);
-}
 .top-bar-btn {
   background: none;
   border: none;
@@ -718,9 +699,6 @@ footer {
   /* Top bar */
   .top-bar { padding: 0 12px; }
   .top-bar-brand { font-size: 1rem; letter-spacing: 0; }
-  .top-bar-sync { padding: 4px 8px; gap: 5px; }
-  .top-bar-sync span { font-size: .6rem; }
-  .top-bar-timer { font-size: .7rem; }
   .top-bar-btn { padding: 4px; }
 
   .page-inner { padding: 1rem .75rem 2rem; }
